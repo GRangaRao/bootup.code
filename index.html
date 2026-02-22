@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Firmware Enablement | Board Bring-up & Hardware Services</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="Firmware, board bring-up, and hardware enablement services for new boards, SoCs, and platforms."
+  />
+  <style>
+  :root {
+    --bg: #ffffff;
+    --bg-alt: #f9fafb;
+    --bg-light: #f3f4f6;
+    --accent: #2563eb;
+    --accent-soft: rgba(37, 99, 235, 0.08);
+    --text: #111827;
+    --text-muted: #6b7280;
+    --border-subtle: #e5e7eb;
+    --max-width: 1100px;
+    --radius: 999px;
+    --radius-card: 14px;
+    --shadow-soft: 0 10px 25px rgba(15, 23, 42, 0.08);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+      "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  main {
+    min-height: 100vh;
+    background: var(--bg);
+  }
+
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.94);
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .nav-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 14px 20px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.95rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .brand-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 999px;
+    background: radial-gradient(circle at 30% 30%, #10b981, #059669);
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.7);
+  }
+
+  .brand-name {
+    font-weight: 600;
+    color: #111827;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  .nav-links a {
+    position: relative;
+    padding-bottom: 3px;
+  }
+
+  .nav-links a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background: var(--accent);
+    transition: width 0.18s ease-out;
+  }
+
+  .nav-links a:hover::after {
+    width: 100%;
+  }
+
+  .nav-cta {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-size: 0.85rem;
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid #e5e7eb;
+    background: #f9fafb;
+    color: var(--text-muted);
+  }
+
+  .pill-badge {
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: #10b981;
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.7);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid #d1d5db;
+    background: #ffffff;
+    color: #111827;
+    cursor: pointer;
+    font-size: 0.85rem;
+    gap: 0.35rem;
+    transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.05s ease;
+  }
+
+  .btn:hover {
+    background: #f3f4f6;
+  }
+
+  .btn-primary {
+    border: 1px solid #2563eb;
+    background: #2563eb;
+    color: #ffffff;
+    font-weight: 500;
+    box-shadow: 0 10px 18px rgba(37, 99, 235, 0.25);
+  }
+
+  .btn-primary:hover {
+    background: #1d4ed8;
+    box-shadow: 0 12px 22px rgba(37, 99, 235, 0.3);
+  }
+
+  .btn-primary span {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .btn-primary svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .section {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 2.1fr) minmax(0, 1.8fr);
+    gap: 2.5rem;
+    padding-top: 32px;
+    padding-bottom: 26px;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.8rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.2rem, 3vw + 1.2rem, 3.1rem);
+    line-height: 1.12;
+    margin: 0 0 16px;
+    color: #0f172a;
+  }
+
+  .hero-highlight {
+    color: var(--accent);
+  }
+
+  .hero-subtitle {
+    font-size: 0.98rem;
+    color: var(--text-muted);
+    max-width: 34rem;
+    line-height: 1.5;
+    margin-bottom: 18px;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-bottom: 18px;
+  }
+
+  .hero-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .hero-pill {
+    padding: 6px 11px;
+    border-radius: 999px;
+    border: 1px solid #e5e7eb;
+    background: #f9fafb;
+  }
+
+  .hero-aside {
+    position: relative;
+  }
+
+  .hero-panel {
+    border-radius: 20px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    padding: 18px 18px 16px;
+    box-shadow: var(--shadow-soft);
+    overflow: hidden;
+    position: relative;
+    isolation: isolate;
+  }
+
+  .hero-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.74rem;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+
+  .hero-panel-dot-row {
+    display: flex;
+    gap: 4px;
+  }
+
+  .hero-panel-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: #e5e7eb;
+  }
+
+  .hero-panel-dot:nth-child(1) {
+    background: #ef4444;
+  }
+
+  .hero-panel-dot:nth-child(2) {
+    background: #f59e0b;
+  }
+
+  .hero-panel-dot:nth-child(3) {
+    background: #22c55e;
+  }
+
+  .hero-panel-body {
+    border-radius: 14px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    padding: 16px 15px 14px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-panel-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1.1fr;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .hero-panel-title {
+    font-size: 0.9rem;
+    color: #111827;
+    margin-bottom: 8px;
+  }
+
+  .hero-panel-text {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+
+  .hero-panel-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .hero-panel-badge {
+    font-size: 0.72rem;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    color: var(--text-muted);
+  }
+
+  .hero-panel-visual {
+    position: relative;
+    min-height: 120px;
+    border-radius: 14px;
+    border: 1px dashed rgba(37, 99, 235, 0.35);
+    background: #eff6ff;
+    overflow: hidden;
+  }
+
+  .hero-panel-orbit::before,
+  .hero-panel-orbit::after {
+    content: "";
+    position: absolute;
+    border-radius: 999px;
+    border: 1px solid rgba(37, 99, 235, 0.25);
+  }
+
+  .hero-panel-orbit::before {
+    width: 140%;
+    height: 140%;
+    top: -20%;
+    left: -15%;
+    transform: rotate(18deg);
+  }
+
+  .hero-panel-orbit::after {
+    width: 140%;
+    height: 140%;
+    top: -20%;
+    left: -15%;
+    transform: rotate(-18deg);
+    border-color: rgba(59, 130, 246, 0.25);
+  }
+
+  .hero-panel-chip {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 78px;
+    height: 78px;
+    border-radius: 20px;
+    border: 1px solid #bfdbfe;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 25px rgba(37, 99, 235, 0.25);
+  }
+
+  .hero-panel-chip-inner {
+    width: 56px;
+    height: 56px;
+    border-radius: 18px;
+    border: 1px solid #bfdbfe;
+    background: #eff6ff;
+    display: grid;
+    place-items: center;
+    font-size: 0.7rem;
+    color: #111827;
+  }
+
+  .hero-panel-chip-inner span {
+    font-size: 0.6rem;
+    color: var(--text-muted);
+  }
+
+  .hero-panel-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .hero-panel-footer-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: #22c55e;
+  }
+
+  .section-heading {
+    font-size: 1.4rem;
+    margin: 0 0 8px;
+    color: #0f172a;
+  }
+
+  .section-subtitle {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    max-width: 34rem;
+    margin-bottom: 20px;
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+
+  .grid-3 .card {
+    border-radius: var(--radius-card);
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
+    padding: 16px 16px 14px;
+    font-size: 0.9rem;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .card h3 {
+    margin: 0 0 8px;
+    font-size: 1rem;
+    color: #111827;
+  }
+
+  .card p {
+    margin: 0 0 10px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.55;
+  }
+
+  .card ul {
+    margin: 0;
+    padding-left: 1rem;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+  }
+
+  .card ul li {
+    margin-bottom: 4px;
+  }
+
+  .pill-row span {
+    font-size: 0.78rem;
+    padding: 4px 9px;
+    border-radius: 999px;
+    border: 1px solid #e5e7eb;
+    background: #f9fafb;
+    color: var(--text-muted);
+  }
+
+  .section-slim {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .industries-row span {
+    padding: 6px 11px;
+    border-radius: 999px;
+    border: 1px solid #e5e7eb;
+    background: #f9fafb;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+
+  .engagement-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+
+  .contact-card {
+    border-radius: 14px;
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
+    padding: 18px 16px 14px;
+    box-shadow: var(--shadow-soft);
+    max-width: 460px;
+  }
+
+  footer {
+    border-top: 1px solid #e5e7eb;
+    background: #f9fafb;
+  }
+
+  .footer-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 16px 20px 18px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 1.1rem;
+  }
+
+  @media (max-width: 880px) {
+    .hero {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .hero-aside {
+      order: -1;
+    }
+    header {
+      position: static;
+    }
+    .nav-links {
+      display: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .grid-3 {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .engagement-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .hero {
+      padding-top: 22px;
+    }
+    .section {
+      padding-inline: 16px;
+    }
+  }
+</style>
+</head>
+<body>
+  <a href="#main" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">
+    Skip to content
+  </a>
+
+  <header>
+    <div class="nav-inner">
+      <div class="brand">
+        <span class="brand-dot"></span>
+        <span class="brand-name">Firmware Enablement</span>
+      </div>
+      <nav class="nav-links">
+        <a href="#who">Who we are</a>
+        <a href="#services">Services</a>
+        <a href="#engagement">Engagement</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="nav-cta">
+        <span class="pill">
+          <span class="pill-badge"></span>
+          Ireland • EU • Remote
+        </span>
+        <a href="#contact" class="btn">Email us</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="section hero">
+      <div class="hero-aside">
+        <div class="hero-panel">
+          <div class="hero-panel-header">
+            <span>Platform bring-up snapshot</span>
+            <div class="hero-panel-dot-row">
+              <span class="hero-panel-dot"></span>
+              <span class="hero-panel-dot"></span>
+              <span class="hero-panel-dot"></span>
+            </div>
+          </div>
+          <div class="hero-panel-body">
+            <div class="hero-panel-grid">
+              <div>
+                <div class="hero-panel-title">From silicon sample to stable OS</div>
+                <div class="hero-panel-text">
+                  Early boot, DDR and power sequencing, drivers, and diagnostics brought
+                  together into a repeatable enablement flow for new boards.
+                </div>
+                <div class="hero-panel-badges">
+                  <span class="hero-panel-badge">Boot & BSP</span>
+                  <span class="hero-panel-badge">Linux bring-up</span>
+                  <span class="hero-panel-badge">JTAG / SWD debug</span>
+                  <span class="hero-panel-badge">Field-ready firmware</span>
+                </div>
+              </div>
+              <div class="hero-panel-visual">
+                <div class="hero-panel-orbit"></div>
+                <div class="hero-panel-chip">
+                  <div class="hero-panel-chip-inner">
+                    FW / BSP
+                    <span>Board bring-up</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hero-panel-footer">
+              <span>
+                <span class="hero-panel-footer-dot"></span>
+                First‑time‑right bring‑up focus
+              </span>
+              <span>Boot logs • Traces • Metrics</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="hero-eyebrow">Ireland • EU • Global delivery</div>
+        <h1>
+          Firmware, board bring‑up, and hardware enablement—built for
+          <span class="hero-highlight">speed, stability, and scale.</span>
+        </h1>
+        <p class="hero-subtitle">
+          We help teams turn new silicon and custom boards into production‑ready
+          platforms with senior expertise in firmware, board bring‑up, and low‑level
+          debug.
+        </p>
+        <div class="hero-actions">
+          <a href="#contact" class="btn btn-primary">
+            <span>Email us</span>
+            <span aria-hidden="true">
+              <svg viewBox="0 0 20 20" fill="none">
+                <path
+                  d="M5 10h8.5M9.5 5.5 14 10l-4.5 4.5"
+                  stroke="#0b1120"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </span>
+          </a>
+          <a href="#services" class="btn">View services</a>
+        </div>
+        <div class="hero-pills">
+          <span class="hero-pill">First‑time‑right bring‑up</span>
+          <span class="hero-pill">Early risk reduction</span>
+          <span class="hero-pill">Proven enablement flow</span>
+          <span class="hero-pill">Fast issue isolation</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Who we are -->
+    <section id="who" class="section">
+      <h2 class="section-heading">Who we are</h2>
+      <p class="section-subtitle">
+        We are a dedicated firmware and hardware enablement partner focused on getting
+        new boards, SoCs, and platforms up and running quickly and reliably.
+      </p>
+
+      <div class="grid-3">
+        <article class="card">
+          <h3>Platform‑first delivery</h3>
+          <p>
+            End‑to‑end support from pre‑silicon planning through first power‑on,
+            OS bring‑up, and production firmware handover.
+          </p>
+          <ul>
+            <li>Boot and reset strategy</li>
+            <li>Board support packages</li>
+            <li>Diagnostics and test firmware</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <h3>Low‑level expertise</h3>
+          <p>
+            Deep experience across bootloaders, BSPs, device trees, and drivers for
+            Linux and RTOS‑based systems.
+          </p>
+          <ul>
+            <li>x86, BIOS, uEFI, Coreboot</li>
+			<li>uCode, Microcode,Boot Firmware</li>
+			<li>U‑Boot and secure boot flows</li>
+			<li>DDR, clocks, and power rails</li>
+            <li>Peripheral bring‑up and tuning</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <h3>Execution advantage</h3>
+          <p>
+            Structured debug workflows, automation‑friendly tooling, and clear,
+            written findings aimed at long‑term maintainability.
+          </p>
+          <ul>
+            <li>Reproducible debug sessions</li>
+            <li>Trace and log‑driven analysis</li>
+            <li>Documentation and handover packs</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- Services -->
+    <section id="services" class="section">
+      <h2 class="section-heading">Services</h2>
+      <p class="section-subtitle">
+        Senior engineering support across the platform lifecycle—available as turnkey
+        delivery or fractional plug‑in expertise.
+      </p>
+
+      <div class="grid-3">
+        <article class="card">
+          <h3>Firmware & boot architecture</h3>
+          <p>
+            Design and implementation of boot flows, firmware layout, and early hardware
+            initialization for new boards.
+          </p>
+          <ul>
+            <li>Multi‑stage boot design</li>
+            <li>Secure boot enablement</li>
+            <li>Recovery and fallback strategies</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <h3>Board bring‑up & BSP</h3>
+          <p>
+            First power‑on, DDR and power validation, and BSP implementation aligned
+            with your target OS.
+          </p>
+          <ul>
+            <li>Power‑on sequencing verification</li>
+            <li>DDR training and tuning</li>
+            <li>Board support package creation</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <h3>OS & driver enablement</h3>
+          <p>
+            Linux and RTOS bring‑up, device trees, and driver work to make peripherals
+            usable by your software stack.
+          </p>
+          <ul>
+            <li>Kernel configuration and DT changes</li>
+            <li>Peripheral and bus drivers</li>
+            <li>Performance and latency tuning</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <h3>Hardware validation & debug</h3>
+          <p>
+            Instrumentation‑led debug of elusive bring‑up issues using JTAG, trace,
+            and targeted test firmware.
+          </p>
+          <ul>
+            <li>JTAG / SWD and trace capture</li>
+            <li>Failure analysis and root cause</li>
+            <li>Structured validation plans</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <h3>Manufacturing & field readiness</h3>
+          <p>
+            Production firmware, factory hooks, and update paths designed for real‑world
+            deployment and support.
+          </p>
+          <ul>
+            <li>Factory test and provisioning flows</li>
+            <li>Logging and telemetry hooks</li>
+            <li>OTA / update and rollback strategies</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <h3>Consultancy & reviews</h3>
+          <p>
+            Independent reviews of designs and firmware from a bring‑up and maintainability
+            perspective.
+          </p>
+          <ul>
+            <li>Schematic and design reviews</li>
+            <li>Risk and readiness assessments</li>
+            <li>Architecture guidance and roadmaps</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- Industries / Domains -->
+    <section class="section section-slim">
+      <h2 class="section-heading">Domains</h2>
+      <p class="section-subtitle">
+        Experience across platforms where hardware–software interaction and reliability
+        are critical.
+      </p>
+      <div class="industries-row">
+        <span>Embedded & industrial controllers</span>
+        <span>Consumer & connected devices</span>
+        <span>Telecom & networking equipment</span>
+        <span>Cloud & datacenter platforms</span>
+      </div>
+    </section>
+
+    <!-- Engagement models -->
+   <!-- <section id="engagement" class="section">
+      <h2 class="section-heading">Engagement models</h2>
+      <p class="section-subtitle">
+        Choose the collaboration style that fits your roadmap, in‑house skills, and
+        risk profile.
+      </p>
+
+      <div class="engagement-grid">
+        <article class="card">
+          <h3>Turnkey</h3>
+          <p>
+            Full platform ownership from bring‑up plan to production‑ready firmware and
+            documentation.
+          </p>
+          <div class="pill-row">
+            <span>Pre‑silicon planning</span>
+            <span>Board bring‑up</span>
+            <span>OS & driver enablement</span>
+            <span>Release and handover</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Fractional</h3>
+          <p>
+            On‑demand senior expertise to unblock, accelerate, or stabilize critical
+            milestones on your roadmap.
+          </p>
+          <div class="pill-row">
+            <span>Design and code reviews</span>
+            <span>Debug and root cause</span>
+            <span>Performance and stability</span>
+            <span>Feature enablement support</span>
+          </div>
+        </article>
+      </div>
+    </section> -->
+	    <!-- Engagement models -->
+        <!-- Engagement models -->
+    <section id="engagement" class="section">
+      <h2 class="section-heading">Engagement models</h2>
+      <p class="section-subtitle">
+        Choose the delivery style that matches your hardware roadmap, uncertainty level, and in‑house bandwidth.
+      </p>
+
+      <div class="engagement-grid">
+        <article class="card">
+          <h3>Turnkey</h3>
+          <p>
+            Full platform ownership from bring‑up plan to production‑ready firmware and documentation.
+          </p>
+          <div class="pill-row">
+            <span>Pre‑silicon planning</span>
+            <span>Board bring‑up</span>
+            <span>OS &amp; driver enablement</span>
+            <span>Release &amp; handover</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Fractional</h3>
+          <p>
+            On‑demand senior expertise to unblock, accelerate, or stabilize critical milestones on your roadmap.
+          </p>
+          <div class="pill-row">
+            <span>Design &amp; code reviews</span>
+            <span>Debug &amp; root cause</span>
+            <span>Performance &amp; stability</span>
+            <span>Feature enablement support</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Discovery &amp; architecture</h3>
+          <p>
+            Short, focused phase to clarify requirements, architecture, and risks before committing to larger scopes.
+          </p>
+          <div class="pill-row">
+            <span>Requirements &amp; constraints</span>
+            <span>Architecture options</span>
+            <span>Effort &amp; risk assessment</span>
+            <span>Roadmap &amp; milestone plan</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Capped time &amp; materials</h3>
+          <p>
+            Flexible execution for uncertain bring‑up and debug work, with a budget ceiling and clear reporting.
+          </p>
+          <div class="pill-row">
+            <span>Board bring‑up &amp; R&amp;D</span>
+            <span>Silicon / HW unknowns</span>
+            <span>Weekly progress &amp; burn</span>
+            <span>Prioritised scope within cap</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Milestone‑based delivery</h3>
+          <p>
+            Work organised into clear milestones with acceptance criteria, ideal once the hardware and scope are better understood.
+          </p>
+          <div class="pill-row">
+            <span>“Board boots” milestone</span>
+            <span>“Peripherals enabled” milestone</span>
+            <span>“Feature ready” releases</span>
+            <span>Tested handover points</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Retainer / ongoing support</h3>
+          <p>
+            Long‑term partnership for maintenance, roadmap features, and new variants once the initial firmware is in the field.
+          </p>
+          <div class="pill-row">
+            <span>Bug fixes &amp; sustaining</span>
+            <span>New SKUs &amp; variants</span>
+            <span>CI / test improvements</span>
+            <span>Release management</span>
+          </div>
+        </article>
+      </div>
+
+      <!-- Delivery flow & milestones -->
+      <div class="card" style="margin-top: 24px;">
+        <h3>Delivery flow &amp; milestones</h3>
+        <p>
+          Typical embedded and firmware engagements move through a phased flow, with concrete milestones and handover points.
+        </p>
+        <ul>
+          <li>
+            <strong>Phase 0 – Discovery:</strong> clarify requirements, hardware constraints, risks, and define the initial milestone plan.
+          </li>
+          <li>
+            <strong>Phase 1 – Bring‑up:</strong> board power‑on, boot to shell/RTOS, core peripherals enabled, initial diagnostics and logs.
+          </li>
+          <li>
+            <strong>Phase 2 – Features:</strong> implement and validate feature sets in small, testable milestones (e.g. “connectivity ready”, “sensing &amp; control ready”).
+          </li>
+          <li>
+            <strong>Phase 3 – Release:</strong> stabilisation, test evidence, documentation, and handover of production firmware images.
+          </li>
+          <li>
+            <strong>Phase 4 – Support:</strong> ongoing fixes, enhancements, and new variants via retainer or fractional engagement.
+          </li>
+        </ul>
+      </div>
+    </section>
+
+
+    <!-- Contact -->
+    <section id="contact" class="section">
+      <h2 class="section-heading">Contact</h2>
+      <p class="section-subtitle">
+        Want to discuss a new board, a stuck bring‑up, or hard‑to‑reproduce firmware
+        issues? Email us and we’ll follow up with concrete next steps.
+      </p>
+
+      <div class="contact-card">
+        <h3>Email</h3>
+        <p>
+          <a href="mailto:info@bootup.code">info@bootup.code</a>
+        </p>
+        <p>Typical response: within 1 business day</p>
+
+        <dl class="contact-meta">
+          <div>
+            <dt>Company</dt>
+            <dd>Firmware Enablement</dd>
+          </div>
+          <div>
+            <dt>Domain</dt>
+            <dd>bootup.code</dd>
+          </div>
+          <div>
+            <dt>Model</dt>
+            <dd>BareMetal / Customize</dd>
+          </div>
+          <div>
+            <dt>Location</dt>
+            <dd>Ireland (EU)</dd>
+          </div>
+        </dl>
+
+        <a
+          class="btn btn-primary"
+          href="mailto:info@firmware-enable.example?subject=Firmware%20%2F%20Board%20bring-up%20inquiry&body=Hi%2C%0D%0A%0D%0AI%27d%20like%20to%20discuss%20a%20firmware%20%2F%20hardware%20enablement%20project.%20Here%20are%20the%20details%3A%0D%0A-%20Company%3A%0D%0A-%20Board%20%2F%20platform%3A%0D%0A-%20Timeline%3A%0D%0A-%20Current%20status%20%2F%20blockers%3A%0D%0A%0D%0AThanks%2C%0D%0A"
+        >
+          Email us
+        </a>
+        <p style="margin-top:10px;font-size:0.78rem;color:var(--text-muted);">
+          By emailing, you agree to share your contact details for the purpose of responding to your inquiry.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div>
+        Firmware Enablement &copy; 2026. All rights reserved.
+      </div>
+      <div class="footer-links">
+        <a href="#who">Who we are</a>
+        <a href="#services">Services</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
