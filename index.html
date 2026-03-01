@@ -66,6 +66,57 @@
     gap: 1.5rem;
   }
 
+.projects-strip {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 18px 20px;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  background: linear-gradient(to bottom, #ffffff, #f9fafb);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.projects-title {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+.projects-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  font-size: 0.88rem;
+}
+
+.projects-links a {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  color: #2563eb;
+  text-decoration: none;
+  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.projects-links a:hover {
+  background: #2563eb;
+  color: #ffffff;
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.25);
+}
+
+@media (max-width: 640px) {
+  .projects-strip {
+    border-radius: 18px;
+    align-items: flex-start;
+  }
+}
+
   .brand {
     display: flex;
     align-items: center;
@@ -610,8 +661,9 @@
               <div>
                 <div class="hero-panel-title">From silicon sample to stable OS</div>
                 <div class="hero-panel-text">
-                  Early boot Firmware, uEFI, Coreboot, Microcode, Signed Firmware, DDR and power sequencing, drivers,and diagnostics orchestrated into a 
-				  repeatable board‑enablement workflow for new boards.        </div>
+                  Early boot Firmware, uEFI, Coreboot, Microcode, Signed Firmware, DDR and power sequencing, drivers, and diagnostics brought
+                  together into a repeatable enablement flow for new boards.
+                </div>
                 <div class="hero-panel-badges">
                   <span class="hero-panel-badge">Boot & BSP</span>
                   <span class="hero-panel-badge">Linux bring-up</span>
@@ -632,7 +684,7 @@
             <div class="hero-panel-footer">
               <span>
                 <span class="hero-panel-footer-dot"></span>
-                Focused on first‑time‑right board bring‑up
+                First‑time‑right bring‑up focus
               </span>
               <span>Boot logs • Traces • Metrics</span>
             </div>
@@ -676,6 +728,18 @@
         </div>
       </div>
     </section>
+
+<section class="section section-slim">
+  <div class="projects-strip">
+    <h3 class="projects-title">Selected projects</h3>
+    <nav class="projects-links">
+      <a href="#project-bootloader">OS Bootloader Secure Boot </a>
+      <a href="#project-iot-firmware">IoT firmware platform</a>
+      <a href="#project-safety">Safety‑critical controller</a>
+    </nav>
+  </div>
+</section>
+
 
     <!-- Who we are -->
     <section id="who" class="section">
@@ -857,7 +921,7 @@
         </article>
 
         <article class="card">
-          <h3>Ready‑to‑deploy</h3>
+          <h3>Fractional</h3>
           <p>
             On‑demand senior expertise to unblock, accelerate, or stabilize critical
             milestones on your roadmap.
@@ -881,7 +945,7 @@
 
       <div class="engagement-grid">
         <article class="card">
-          <h3>Ready‑to‑deploy</h3>
+          <h3>Turnkey</h3>
           <p>
             Full platform ownership from bring‑up plan to production‑ready firmware and documentation.
           </p>
@@ -894,7 +958,7 @@
         </article>
 
         <article class="card">
-          <h3>On‑demand</h3>
+          <h3>Fractional</h3>
           <p>
             On‑demand senior expertise to unblock, accelerate, or stabilize critical milestones on your roadmap.
           </p>
@@ -1004,15 +1068,15 @@
         <dl class="contact-meta">
           <div>
             <dt>Company</dt>
-            <dd>Bringuplab</dd>
+            <dd>Firmware Enablement</dd>
           </div>
           <div>
             <dt>Domain</dt>
-            <dd>Hardware/Firmware Enablement</dd>
+            <dd>bootup.code</dd>
           </div>
           <div>
             <dt>Model</dt>
-            <dd>Bare-Metal & Custom Platforms</dd>
+            <dd>BareMetal / Customize</dd>
           </div>
           <div>
             <dt>Location</dt>
@@ -1047,8 +1111,3 @@
   </footer>
 </body>
 </html>
-
-
-
-
-
