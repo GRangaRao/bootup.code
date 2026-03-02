@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Coreboot Daqri Acela BIOS Release Notes</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.5;
+      margin: 20px;
+      background-color: #f5f5f5;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 24px 32px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    h1, h2, h3, h4 {
+      margin-top: 1.2em;
+      margin-bottom: 0.4em;
+    }
+    h1 {
+      font-size: 26px;
+      border-bottom: 2px solid #444;
+      padding-bottom: 6px;
+    }
+    h2 {
+      font-size: 22px;
+      border-bottom: 1px solid #777;
+      padding-bottom: 4px;
+    }
+    h3 {
+      font-size: 18px;
+      color: #333;
+    }
+    h4 {
+      font-size: 16px;
+      color: #333;
+    }
+    .build-block {
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 16px 18px;
+      margin: 16px 0;
+      background: #fafafa;
+    }
+    .build-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-bottom: 1px solid #e0e0e0;
+      padding-bottom: 6px;
+      margin-bottom: 8px;
+    }
+    .build-number {
+      font-size: 18px;
+      font-weight: bold;
+      color: #222;
+    }
+    .last-updated {
+      font-size: 13px;
+      color: #666;
+    }
+    ul {
+      margin: 4px 0 10px 20px;
+    }
+    li {
+      margin-bottom: 4px;
+    }
+    .section-label {
+      font-weight: bold;
+      margin-top: 8px;
+    }
+    .file-list {
+      margin-top: 4px;
+    }
+    .file-list li {
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 13px;
+    }
+    .subheading {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    code {
+      background: #eee;
+      padding: 2px 4px;
+      border-radius: 3px;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 13px;
+    }
+    a {
+      color: #0066cc;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .notes {
+      font-style: italic;
+      color: #555;
+      margin-top: 8px;
+    }
+    .indent {
+      margin-left: 20px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <h1>Release Notes for Coreboot Daqri Acela BIOS</h1>
+  <p>(Based off Coreboot 4.8.1 BIOS for KabyLake LPDDR3)</p>
+
+  <!-- SECTION 1 -->
+  <h2>SECTION 1: Change Summary</h2>
+
+  <!-- BUILD 006 SUMMARY -->
+  <div class="build-block">
+    <div class="build-header">
+      <div class="build-number">BUILD NUMBER: 006</div>
+      <div class="last-updated">Last updated: 14 Feb 2019</div>
+    </div>
+
+    <div class="subheading">Changes</div>
+    <ul>
+      <li>Embed SecureBoot keys in the Coreboot.</li>
+      <li>Signed the boot loader and EFI application with enrolled counterparts <code>db.auth</code>, <code>KEK.auth</code>, <code>pk.auth</code>.</li>
+      <li>Key generation with <code>openssl</code> is documented in <em>"Ircona Secure Boot Process for Daqri.docx"</em>.</li>
+      <li>Issue where VGA OPROM in legacy region C0000 was not loaded is fixed in Coreboot as PCI 3.0 structure was not verified.</li>
+    </ul>
+
+    <div class="subheading">Bugs Resolved</div>
+    <ul>
+      <li>Bug6160 – SecureBoot keys are embedded inside Coreboot BIOS.</li>
+      <li>Bug6161 – All SecureBoot BIOS setup options are removed except secure boot state.</li>
+      <li>Bug6165 – In C0000 region VGA OPROM is not seen.</li>
+    </ul>
+  </div>
+
+  <!-- BUILD 005 SUMMARY -->
+  <div class="build-block">
+    <div class="build-header">
+      <div class="build-number">BUILD NUMBER: 005</div>
+      <div class="last-updated">Last updated: 12 Feb 2019</div>
+    </div>
+
+    <div class="subheading">Changes</div>
+    <ul>
+      <li>Enabled SecureBoot in the Coreboot payload.</li>
+      <li>DB, KEK, PK need to be enrolled.</li>
+    </ul>
+
+    <div class="subheading">Bugs Resolved</div>
+    <ul>
+      <li>Bug6153 – SecureBoot related drivers and libraries are enabled in Coreboot payload.</li>
+    </ul>
+  </div>
+
+  <!-- BUILD 004 SUMMARY -->
+  <div class="build-block">
+    <div class="build-header">
+      <div class="build-number">BUILD NUMBER: 004</div>
+      <div class="last-updated">Last updated: 04 Feb 2019</div>
+    </div>
+
+    <div class="subheading">Changes</div>
+    <ul>
+      <li>Build warnings during payload are corrected.</li>
+      <li>Checks for Timeout NVRAM variable from <code>efibootmgr</code> or Boot Manager are added.</li>
+    </ul>
+
+    <div class="subheading">Bugs Resolved</div>
+    <ul>
+      <li>Bug6151 – Build warnings in Coreboot payload.</li>
+      <li>Bug6152 – Setting Timeout through <code>efibootmgr</code>.</li>
+    </ul>
+  </div>
+
+  <!-- BUILD 003 SUMMARY -->
+  <div class="build-block">
+    <div class="build-header">
+      <div class="build-number">BUILD NUMBER: 003</div>
+      <div class="last-updated">Last updated: 29 Jan 2019</div>
+    </div>
+
+    <div class="subheading">Changes</div>
+    <ul>
+      <li>GPIOs for ESPI are added back.</li>
+      <li>GPIO is for SATA signal <code>SATA_DEVSLP2</code>.</li>
+      <li>Comments for GPIO pins PME pin, EMMC RST are changed.</li>
+    </ul>
+
+    <div class="subheading">Bugs Resolved</div>
+    <ul>
+      <li>Bug6150 – GPIOs for B1 were configured as per schematics.</li>
+      <li>Bug6149 – Offsets for <code>VpdBlock</code> and <code>FTW</code> are changed to <code>D00000</code>, <code>D3E000</code>.</li>
+    </ul>
+  </div>
+
+  <!-- BUILD 002 SUMMARY -->
+  <div class="build-block">
+    <div class="build-header">
+      <div class="build-number">BUILD NUMBER: 002</div>
+      <div class="last-updated">Last updated: 12 Jan 2019</div>
+    </div>
+
+    <div class="subheading">Changes</div>
+    <ul>
+      <li>Variable services added to <code>firmware-acela</code>.</li>
+      <li>Flag added <code>RUNRIME_VARIABLE_SERVICES=ENABLED</code>.</li>
+      <li>Copy of the changes is also maintained at <code>svn://192.168.200.70/Daqri/Acela/BIOS/TREE1/tags/firmware-acela-0102</code> (SVN of Ircona).</li>
+      <li>Verified the variable writes in release build.</li>
+      <li>Added debug library changes for debug build.</li>
+      <li>BootOrder can be changed from EFI setup.</li>
+    </ul>
+
+    <div class="subheading">Bugs Resolved</div>
+    <ul>
+      <li>Bug6145 – <code>efibootmgr</code> in Ubuntu fails to set the boot order.</li>
+    </ul>
+
+    <div class="subheading">Known Issues</div>
+    <p>None listed.</p>
+  </div>
+
+  <!-- BUILD 001 SUMMARY -->
+  <div class="build-block">
+    <div class="build-header">
+      <div class="build-number">BUILD NUMBER: 001</div>
+      <div class="last-updated">Last updated: 30 Nov 2018</div>
+    </div>
+
+    <div class="subheading">Changes</div>
+    <ul>
+      <li>
+        Download the latest dev branch Acela Coreboot from
+        <a href="https://bitbucket.org/daqri1/coreboot-acela/branch/af_dev" target="_blank">
+          https://bitbucket.org/daqri1/coreboot-acela/branch/af_dev
+        </a>.
+      </li>
+      <li>Identify the changes already done.</li>
+      <li>Isolate and pick the changes.</li>
+      <li>Initial merge for Daqri Acela BIOS (integrated all Acela changes from Coreboot 4.6 to Coreboot 4.8.1).</li>
+    </ul>
+
+    <div class="subheading">Bugs Resolved</div>
+    <ul>
+      <li>Bug6119 – Merged <code>af_dev</code> branch CoreBoot baseline 4.6 to CoreBoot baseline 4.8.1.</li>
+    </ul>
+
+    <div class="subheading">Known Issues</div>
+    <p>None listed.</p>
+  </div>
+
+  <!-- SECTION 2 -->
+  <h2>SECTION 2: Change Details</h2>
+
+  <!-- BUILD 006 DETAILS -->
+  <div class="build-block">
+    <div class="build-header">
+      <div class="build-number">BUILD NUMBER: 006</div>
+    </div>
+
+    <p class="subheading">Embed SecureBoot keys in the Coreboot</p>
+    <p><strong>Author:</strong> Ranga</p>
+
+    <p class="section-label">Steps to embed SecureBoot keys:</p>
+    <ul>
+      <li>Edit <code>CorebootPayloadPkgIa32X64d.dsc</code>:
+        <div class="indent"><code>SECURE_BOOT_ENABLE = TRUE</code></div>
+      </li>
+      <li>Set <code>coreboot-acela\configs\config.kblrvp3\CONFIG_SB=y</code>.</li>
+      <li>Put the keys <code>db.auth</code>, <code>KEK.auth</code>, <code>PK.auth</code> in <code>coreboot-acela</code>.</li>
+    </ul>
+
+    <p class="section-label">Testing</p>
+    <ul>
+      <li>Boot to Ubuntu and run <code>flashrom</code> to flash <code>coreboot.rom</code> into SEC BIOS (with keys inside).</li>
+      <li>Let EC remain at <code>gpioset bios_sw 1</code>.</li>
+      <li>Reboot and verify OS fails to boot as <code>grub.efi</code> is not signed.</li>
+      <li>Boot to shell and run the signed applications.</li>
+    </ul>
+
+    <p class="section-label">Bug 6160 – Files</p>
+    <ul class="file-list">
+      <li>M: <code>payloads\external\tianocore\tianocore\CorebootPayloadPkg\CorebootPayloadPkgIa32X64.dsc</code></li>
+      <li>M: <code>payloads\external\tianocore\tianocore\CorebootPayloadPkg\CorebootPayloadPkg.dec</code></li>
+      <li>M: <code>coreboot-acela\src\mainboard\intel\kblkrvp\chromeos.fmd</code></li>
+      <li>M: <code>payloads\external\tianocore\tianocore\Mdemodulepkg\universal\variable\runtimedxe\VariableDxe.c</code></li>
+      <li>M: <code>payloads\external\tianocore\tianocore\Mdemodulepkg\universal\variable\runtimedxe\VariableRuntimeDxe.inf</code></li>
+      <li>M: <code>coreboot-acela\Makefile.inc</code></li>
+      <li>A: <code>coreboot-acela\db.auth</code></li>
+      <li>A: <code>coreboot-acela\KEK.auth</code></li>
+      <li>A: <code>coreboot-acela\pk.auth</code></li>
+      <li>M: <code>IrconaReleaseNotes</code></li>
+    </ul>
+
+    <p class="section-label">Bug 6161 – Files</p>
+    <ul class="file-list">
+      <li>M: <code>payloads\external\tianocore\tianocore\SecurityPkg\VariableAuthenticated\SecureBootConfigDxe\SecureBootConfig.vfr</code></li>
+    </ul>
+
+    <p class="section-label">Bug 6165 – Files</p>
+    <ul class="file-list">
+      <li>M: <code>coreboot-acela\src\device\pci_rom.c</code></li>
+      <li>M: <code>coreboot-acela\.config</code></li>
+    </ul>
+
+    <p class="section-label">Legacy VGA configuration (menuconfig)</p>
+    <ul>
+      <li>Graphics initialization: <em>Run VGA Option ROMs</em> (disables FSP GOP).</li>
+      <li>Display → Set framebuffer graphics resolution:
+        <div class="indent">Framebuffer graphics resolution: <code>800x600 16.8M-color (8:8:8)</code></div>
+      </li>
+      <li>Option ROM execution type: <em>Native mode</em>.</li>
+      <li>Enable graphical bootsplash.</li>
+      <li>Framebuffer mode: <em>VESA FrameBuffer</em>.</li>
+    </ul>
+  </div>
+
+  <!-- BUILD 005 DETAILS -->
+  <div class="build-block">
+    <div class="build-header">
+      <div class="build-number">BUILD NUMBER: 005</div>
+    </div>
+
+    <p class="subheading">Enabled SecureBoot in the payload</p>
+    <p><strong>Author:</strong> Ranga</p>
+
+    <p class="section-label">Steps to enable SecureBoot:</p>
+    <ul>
+      <li>Edit <code>CorebootPayloadPkgIa32X64d.dsc</code>:
+        <div class="indent"><code>SECURE_BOOT_ENABLE = TRUE</code></div>
+      </li>
+      <li>Set <code>coreboot-acela\configs\config.kblrvp3\CONFIG_SB=y</code>.</li>
+    </ul>
+
+    <p class="section-label">Testing</p>
+    <ul>
+      <li>Boot to Ubuntu and run:
+        <ul>
+          <li><code>efi-updatevar db db.auth</code></li>
+          <li><code>efi-updatevar KEK KEK.auth</code></li>
+          <li><code>efi-updatevar PK PK.auth</code></li>
+        </ul>
+      </li>
+      <li>Reboot and verify OS fails to boot as <code>grub.efi</code> is not signed.</li>
+      <li>Boot to shell and run the signed applications.</li>
+    </ul>
+
+    <p class="section-label">Bug 6153 – Files</p>
+    <ul class="file-list">
+      <li>M: <code>payloads\external\tianocore\tianocore\CorebootPayloadPkg\CorebootPayloadPkgIa32X64.dsc</code></li>
+      <li>M: <code>payloads\external\tianocore\tianocore\CorebootPayloadPkg\CorebootPayloadPkg.fdf</code></li>
+      <li>M: <code>payloads\external\tianocore\tianocore\SecurityPkg\Library\PlatformSecureLibNull\PlatformSecureLibNull.c</code></li>
+      <li>M: <code>payloads\external\tianocore\tianocore\SecurityPkg\SecurityPkg.dec</code></li>
+      <li>A: <code>payloads\external\tianocore\tianocore\CryptoPkg\Library\OpensslLib\openssl-1.0.2j</code></li>
+      <li>M: <code>coreboot-acela\Makefile.inc</code></li>
+      <li>A: <code>coreboot-acela\VpdBlock_SecBoot.bin</code></li>
+      <li>A: <code>coreboot-acela\configs\config.kblrvp3</code></li>
+      <li>M: <code>IrconaReleaseNotes</code></li>
+    </ul>
+  </div>
+
+  <!-- BUILD 004 DETAILS -->
+  <div class="build-block">
+    <div class="build-header">
+      <div class="build-number">BUILD NUMBER: 004</div>
+    </div>
+
+    <p class="subheading">Build warnings and Timeout NVRAM variable</p>
+    <p><strong>Author:</strong> Ranga</p>
+
+    <p class="section-label">Testing</p>
+    <ul>
+      <li>Boot to Ubuntu and run <code>efibootmgr</code>.</li>
+      <li>Run <code>efibootmgr -t 10</code>, reboot, and verify 10 seconds wait during BDS.</li>
+      <li>Alternatively, in EFI shell: <code>dmpstore Timeout</code>.</li>
+    </ul>
+
+    <p class="section-label">Bug 6151 – Files</p>
+    <ul class="file-list">
+      <li>M: <code>payloads\external\tianocore\tianocore\CorebootPayloadPkg\CorebootPayloadPkgIa32X64.dsc</code></li>
+      <li>M: <code>IrconaReleaseNotes</code></li>
+    </ul>
+
+    <p class="section-label">Bug 6152 – Files</p>
+    <ul class="file-list">
+      <li>M: <code>payloads\external\tianocore\tianocore\MdeModulePkg\Universal\BdsDxe.c</code></li>
+      <li>M: <code>IrconaReleaseNotes</code></li>
+    </ul>
+  </div>
+
+  <!-- BUILD 003 DETAILS -->
+  <div class="build-block">
+    <div class="build-header">
+      <div class="build-number">BUILD NUMBER: 003</div>
+    </div>
+
+    <p class="subheading">GPIOs for B1 board configuration</p>
+    <p><strong>Author:</strong> Ranga</p>
+
+    <p class="section-label">Testing</p>
+    <ul>
+      <li>Booted to Ubuntu with the changes.</li>
+    </ul>
+
+    <p class="section-label">Files</p>
+    <ul class="file-list">
+      <li>M: <code>coreboot-acela\src\mainboard\intel\kblrvp\variants\rvp3\include\variant\gpio.h</code></li>
+      <li>M: <code>IrconaReleaseNotes</code></li>
+      <li>M: <code>Makefile.inc</code></li>
+    </ul>
+  </div>
+
+  <!-- BUILD 002 DETAILS -->
+  <div class="build-block">
+    <div class="build-header">
+      <div class="build-number">BUILD NUMBER: 002</div>
+    </div>
+
+    <p class="subheading">Enabled variable services in EFI payload</p>
+    <p><strong>Author:</strong> Ranga</p>
+
+    <p class="section-label">Testing</p>
+    <ul>
+      <li>Verify PLB boot to internal EFI shell.</li>
+      <li>Verify PLB boot to Ubuntu from eMMC.</li>
+      <li>Verify boot to external EFI shell on USB flash drive.</li>
+      <li>Verify debug output on UART/COM port.</li>
+      <li>Verify debug output on EC debug log (<code>minicom -D /dev/ttyUSB0</code>).</li>
+    </ul>
+
+    <p class="section-label">EFI Shell</p>
+    <ul>
+      <li>Change the BootOrder from EFI.</li>
+      <li><code>EfiShell&gt; dmpstore -d "Variable"</code></li>
+      <li><code>dmpstore mtc</code> (higher 16 bits will have the number of resets since the board powered-on).</li>
+    </ul>
+
+    <p class="section-label">OS</p>
+    <ul>
+      <li><code>efibootmgr -o 0 1 2 3 4</code> (change boot order).</li>
+      <li><code>efibootmgr -O bootorder</code> (delete boot order).</li>
+      <li><code>efibootmgr -c -L "label" -l "media/acela/USB/EFI/BOOT/bootx64.efi"</code></li>
+    </ul>
+
+    <p class="section-label">Files Modified</p>
+    <ul class="file-list">
+      <li>M: <code>CorebootPayloadPkgIa32X64.dsc</code></li>
+      <li>M: <code>CorebootPayloadPkg.fdf</code></li>
+      <li>M: <code>CorebootPayloadPkg.dec</code></li>
+    </ul>
+
+    <p class="section-label">SPI Drivers Added</p>
+    <ul class="file-list">
+      <li>A: <code>CorebootPayloadPkg\RuntimeDxe\ScSpiRuntime.inf</code></li>
+      <li>A: <code>CorebootPayloadPkg\SpiFvbService\SpiFvbServiceDxe.inf</code></li>
+    </ul>
+
+    <p class="section-label">Libraries Added</p>
+    <ul class="file-list">
+      <li>A: <code>CorebootPayloadPkg\Library\BasePchSpiCommonLib\BasePchSpiCommonLib.inf</code></li>
+      <li>A: <code>CorebootPayloadPkg\Library\DxeSpiFlashCommonLib\DxeSpiFlashCommonLib.inf</code></li>
+    </ul>
+
+    <p class="section-label">Include files/folders Added</p>
+    <ul class="file-list">
+      <li>A: All files under <code>CorebootPayloadPkg\Include</code></li>
+      <li>A: <code>CorebootPayloadPkg\Library\MmPciLib.h</code></li>
+      <li>A: <code>CorebootPayloadPkg\Library\PchSpiCommonLib.h</code></li>
+      <li>A: <code>CorebootPayloadPkg\Library\ScSpiCommonLib.h</code></li>
+      <li>A: <code>CorebootPayloadPkg\Library\SpiFlashCommon.h</code></li>
+    </ul>
+
+    <p class="section-label">Drivers from EDK</p>
+    <ul class="file-list">
+      <li>A: <code>MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteDxe.inf</code></li>
+      <li>A: <code>MdeModulePkg/Universal/Variable/RuntimeDxe/VariableRuntimeDxe.inf</code></li>
+    </ul>
+
+    <p class="section-label">Added Binaries</p>
+    <ul class="file-list">
+      <li>A: <code>Vpdblock.bin</code> – for variable store header.</li>
+      <li>A: <code>FTW.bin</code> – for FTW header.</li>
+      <li>M: <code>Makefile.inc</code> – binaries patched at address <code>E00000</code> and <code>E3E000</code> during build after <code>coreboot.rom</code> is generated.</li>
+    </ul>
+
+    <p class="section-label">Additional Files</p>
+    <ul class="file-list">
+      <li>A: <code>payloads\external\tianocore\tianocore\CorebootPayloadPkg\RuntimeDxe</code></li>
+      <li>A: <code>payloads\external\tianocore\tianocore\CorebootPayloadPkg\SpiFvbService</code></li>
+      <li>A: <code>payloads\external\tianocore\tianocore\CorebootPayloadPkg\Library\BasePchSpiCommonLib</code></li>
+      <li>A: <code>payloads\external\tianocore\tianocore\CorebootPayloadPkg\Library\DxeSpiFlashCommonLib</code></li>
+      <li>M: <code>payloads\external\tianocore\tianocore\CorebootPayloadPkg\Library\MmPciLib.h</code></li>
+      <li>M: <code>payloads\external\tianocore\tianocore\CorebootPayloadPkg\Library\PchSpiCommonLib.h</code></li>
+      <li>M: <code>payloads\external\tianocore\tianocore\CorebootPayloadPkg\Library\ScSpiCommonLib.h</code></li>
+      <li>M: <code>payloads\external\tianocore\tianocore\CorebootPayloadPkg\Library\SpiFlashCommon.h</code></li>
+      <li>A: <code>payloads\external\tianocore\tianocore\CorebootPayloadPkg\Include\</code></li>
+      <li>M: <code>payloads\external\tianocore\tianocore\CorebootPayloadPkg\CorebootPayloadPkg.dec</code></li>
+      <li>M: <code>payloads\external\tianocore\tianocore\CorebootPayloadPkg\CorebootPayloadPkg.fdf</code></li>
+      <li>M: <code>payloads\external\tianocore\tianocore\CorebootPayloadPkg\CorebootPayloadPkgIa32X64.dsc</code></li>
+      <li>M: <code>src\soc\intel\skylake\lockdown.c</code></li>
+      <li>M: <code>IrconaReleaseNotes</code></li>
+      <li>M: <code>Readme.md</code></li>
+    </ul>
+  </div>
+
+  <!-- BUILD 001 DETAILS -->
+  <div class="build-block">
+    <div class="build-header">
+      <div class="build-number">BUILD NUMBER: 001</div>
+    </div>
+
+    <p class="subheading">Initial code merge for Coreboot Acela BIOS</p>
+    <p>Initial code merge for Coreboot Acela BIOS (merge all Acela changes from Coreboot 4.6 to Coreboot 4.8.1).</p>
+    <p><strong>Author:</strong> Ranga</p>
+
+    <p class="section-label">Testing</p>
+    <ul>
+      <li>Verify PLB boot to internal EFI shell.</li>
+      <li>Verify PLB boot to Ubuntu from eMMC.</li>
+      <li>Verify boot to external EFI shell on USB flash drive.</li>
+      <li>Verify debug output on UART/COM port.</li>
+      <li>Verify debug output on EC debug log (<code>minicom -D /dev/ttyUSB0</code>).</li>
+    </ul>
+
+    <p class="section-label">Files</p>
+    <ul class="file-list">
+      <li>M: <code>configs/config.kblrvp3</code></li>
+      <li>M: <code>payloads/external/tianocore/patches/08_BaseTools-Fix-building-with-Werror-stringop-truncati.patch</code></li>
+      <li>M: <code>payloads/external/tianocore/patches/09_gcc7-Fix-building-with-fpermissive.patch</code></li>
+      <li>M: <code>src/drivers/intel/gma/opregion.c</code></li>
+      <li>M: <code>src/lib/prog_loaders.c</code></li>
+      <li>M: <code>src/mainboard/intel/kblrvp/Kconfig</code></li>
+      <li>M: <code>src/mainboard/intel/kblrvp/acpi/ec.asl</code></li>
+      <li>M: <code>src/mainboard/intel/kblrvp/acpi/ec_i2c.asl</code></li>
+      <li>M: <code>src/mainboard/intel/kblrvp/acpi/imu.asl</code></li>
+      <li>M: <code>src/mainboard/intel/kblrvp/acpi/led.asl</code></li>
+      <li>M: <code>src/mainboard/intel/kblrvp/acpi/mipi_camera.asl</code></li>
+      <li>M: <code>src/mainboard/intel/kblrvp/acpi/superio.asl</code></li>
+      <li>M: <code>src/mainboard/intel/kblrvp/acpi/touchpad.asl</code></li>
+      <li>M: <code>src/mainboard/intel/kblrvp/dsdt.asl</code></li>
+      <li>M: <code>src/mainboard/intel/kblrvp/ramstage.c</code></li>
+      <li>M: <code>src/mainboard/intel/kblrvp/romstage.c</code></li>
+      <li>M: <code>src/mainboard/intel/kblrvp/spd/micron_dimm_MT52L512M64D4PQ-107.spd.hex</code></li>
+      <li>M: <code>src/mainboard/intel/kblrvp/spd/spd_util.c</code></li>
+      <li>M: <code>src/mainboard/intel/kblrvp/variants/rvp3/devicetree.cb</code></li>
+      <li>M: <code>src/mainboard/intel/kblrvp/variants/rvp3/include/variant/_gpio.h</code></li>
+      <li>M: <code>src/mainboard/intel/kblrvp/variants/rvp3/include/variant/gpio.h</code></li>
+      <li>M: <code>src/soc/intel/common/block/uart/uart.c</code></li>
+      <li>M: <code>src/soc/intel/skylake/acpi/pcie.asl</code></li>
+      <li>M: <code>src/soc/intel/skylake/chip.c</code></li>
+      <li>M: <code>src/soc/intel/skylake/chip_fsp20.c</code></li>
+      <li>M: <code>src/soc/intel/skylake/romstage/romstage.c</code></li>
+      <li>M: <code>src/soc/intel/skylake/romstage/romstage_fsp20.c</code></li>
+      <li>M: <code>util/genbuild_h/genbuild_h.sh</code></li>
+      <li>M: <code>util/inteltool/gpio.c</code></li>
+      <li>M: <code>util/inteltool/inteltool.c</code></li>
+      <li>M: <code>util/inteltool/inteltool.h</code></li>
+      <li>M: <code>util/inteltool/powermgt.c</code></li>
+      <li>M: <code>util/inteltool/rootcmplx.c</code></li>
+      <li>M: <code>util/inteltool/spi.c</code></li>
+      <li>M: <code>Readme.md</code></li>
+    </ul>
+
+    <p class="section-label">Notes</p>
+    <div class="notes">
+      Build steps:
+      <ol>
+        <li>Build the <code>coreboot-acela</code> with 4.8.1.</li>
+        <li>Merge 4.6 Acela changes to Coreboot 4.8.1.</li>
+        <li>Configure the Acela project:
+          <div class="indent"><code>make defconfig KBUILD_DEFCONFIG=configs/config.kblkrvp3</code></div>
+        </li>
+        <li>Setup the tools:
+          <div class="indent"><code>make crossgcc-i386 CPUS=6</code></div>
+        </li>
+        <li>Build Coreboot:
+          <div class="indent"><code>make CPUS=6</code></div>
+        </li>
+        <li>Pick the binary:
+          <div class="indent"><code>coreboot-4.8.1/build/coreboot.rom</code></div>
+        </li>
+        <li>Flash it:
+          <div class="indent"><code>flashrom -w coreboot.rom</code></div>
+        </li>
+      </ol>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
